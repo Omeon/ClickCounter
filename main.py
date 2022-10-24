@@ -5,15 +5,19 @@ from psgtray import SystemTray
 
 def image_gui():
     sg.theme('dark grey 13')
-    layout = [[sg.Text('Это ClickCounter.')],
-              [sg.Text('Посмотрите, как сильно вы мучаете кнопки своей верной серой подруги.')],
-              [sg.Text()],
-              [sg.Text('Левая кнопка: '), sg.Text(key='left')],
-              [sg.Text('Правая кнопка: '), sg.Text(key='right')],
-              [sg.Text('Средняя кнопка: '), sg.Text(key='middle')],
-              [sg.Text('Первая боковая кнопка: '), sg.Text(key='x1')],
-              [sg.Text('Вторая боковая кнопка: '), sg.Text(key='x2')],
-              [sg.Multiline(size=(60, 10), disabled=True, reroute_stdout=False, reroute_cprint=True, key='-OUT-')],
+
+    count_col = [[sg.Text('Левая кнопка: '), sg.Text(key='left')],
+                [sg.Text('Правая кнопка: '), sg.Text(key='right')],
+                [sg.Text('Средняя кнопка: '), sg.Text(key='middle')],
+                [sg.Text('Первая боковая кнопка: '), sg.Text(key='x1')],
+                [sg.Text('Вторая боковая кнопка: '), sg.Text(key='x2')]]
+    gif_col = [[sg.Image('monkey_mouse.gif', key='gif')]]
+
+    layout = [[sg.Text('Это ClickCounter.', font=('Monospace', 20))],
+              [sg.Text('Посмотри, как сильно ты мучаете кнопки своей', font=('Monospace', 12))],
+              [sg.Text('верной серой подруги.', font=('Monospace', 12))],
+              [sg.Column(count_col), sg.Column(gif_col, justification='c')],
+              [sg.Multiline(size=(55, 6), disabled=True, reroute_stdout=False, reroute_cprint=True, key='-OUT-')],
               [sg.Push(), sg.Button('Свернуть в трей', key='Hide')]
               ]
 
@@ -31,7 +35,8 @@ def image_gui():
 
     # infinity window update cycle
     while True:
-        event, values = window.read(timeout=100)
+        event, values = window.read(timeout=50)
+
 
         # use the System Tray's event as if was from the window
         if event == tray.key:
@@ -55,6 +60,8 @@ def image_gui():
             window.bring_to_front()
         elif event == 'Exit':
             break
+
+        window['gif'].update_animation('monkey_mouse.gif', time_between_frames=50)
 
 
     window.close()
