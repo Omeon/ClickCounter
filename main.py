@@ -5,6 +5,7 @@ from psgtray import SystemTray
 
 def image_gui():
     sg.theme('dark grey 13')
+
     count_col = [[sg.Text('Левая кнопка: '), sg.Text(key='left')],
                 [sg.Text('Правая кнопка: '), sg.Text(key='right')],
                 [sg.Text('Средняя кнопка: '), sg.Text(key='middle')],
@@ -35,6 +36,7 @@ def image_gui():
     # infinity window update cycle
     while True:
         event, values = window.read(timeout=50)
+
 
         # use the System Tray's event as if was from the window
         if event == tray.key:
