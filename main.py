@@ -4,37 +4,67 @@ from psgtray import SystemTray
 
 
 def image_gui():
-    layout = [[sg.Text('Это ClickCounter. Посмотрите, как сильно вы мучаете кнопки своей верной серой подруги.')],
-              [sg.T('', key="log")],
+    sg.theme('dark grey 13')
+    layout = [[sg.Text('Это ClickCounter.')],
+              [sg.Text('Посмотрите, как сильно вы мучаете кнопки своей верной серой подруги.')],
+              [sg.Text()],
               [sg.Text('Левая кнопка: '), sg.Text(key='left')],
               [sg.Text('Правая кнопка: '), sg.Text(key='right')],
               [sg.Text('Средняя кнопка: '), sg.Text(key='middle')],
-              [sg.Text('Первая боковая: '), sg.Text(key='x1')],
+              [sg.Text('Первая боковая кнопка: '), sg.Text(key='x1')],
               [sg.Text('Вторая боковая кнопка: '), sg.Text(key='x2')],
-              [sg.Multiline(size=(60, 10), disabled=True, reroute_stdout=False, reroute_cprint=True, key='-OUT-')]
+              [sg.Multiline(size=(60, 10), disabled=True, reroute_stdout=False, reroute_cprint=True, key='-OUT-')],
+              [sg.Push(), sg.Button('Свернуть в трей', key='Hide')]
               ]
 
-    window = sg.Window('ClickCounter', layout, finalize=True)
+    menu_tray = ['',
+                 ['Show window', 'Exit']
+                 ]
+
+    window = sg.Window('ClickCounter', layout, finalize=True, icon='mouseclick.ico')
+
+    tray = SystemTray(menu_tray, window=window, icon='mouseclick.ico',
+                      tooltip='ClickCounter', single_click_events=False)
 
     # creating a mouse click monitoring stream
     Counter.counting_clicks()
 
     # infinity window update cycle
     while True:
-        event, values = window.Read(timeout=100)
-        if Counter.log:
+        event, values = window.read(timeout=100)
+
+        # use the System Tray's event as if was from the window
+        if event == tray.key:
+            event = values[event]
+
+        # work with the window and updating it
+        if event == sg.WIN_CLOSED:
+            break
+        elif Counter.log:
             sg.cprint(Counter.log)
             Counter.log = ''
-            window['left'](Counter.counter['left'][1])
-            window['right'](Counter.counter['right'][1])
-            window['middle'](Counter.counter['middle'][1])
-            window['x1'](Counter.counter['x1'][1])
-            window['x2'](Counter.counter['x2'][1])
-            window['log']('была нажата кнопка')
-        if event == sg.WINDOW_CLOSED:
-            window.close()
+            refresh_count(window, ['left', 'right', 'middle', 'x1', 'x2'])
+            window.Refresh()
+
+        # work with the tray
+        if event == 'Hide':
+            window.hide()
+            tray.show_icon()
+        elif event in ('Show window', sg.EVENT_SYSTEM_TRAY_ICON_DOUBLE_CLICKED):
+            window.un_hide()
+            window.bring_to_front()
+        elif event == 'Exit':
             break
-        window.Refresh()
+
+
+    window.close()
+    tray.close()
+
+
+def refresh_count(window: sg.Window, keys: list):
+    for key in keys:
+        if Counter.counter[key][1]:
+            window[key](Counter.counter[key][1])
 
 
 def main():
