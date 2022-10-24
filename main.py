@@ -37,7 +37,6 @@ def image_gui():
     while True:
         event, values = window.read(timeout=50)
 
-
         # use the System Tray's event as if was from the window
         if event == tray.key:
             event = values[event]
@@ -62,7 +61,6 @@ def image_gui():
             break
 
         window['gif'].update_animation('monkey_mouse.gif', time_between_frames=50)
-
 
     window.close()
     tray.close()
