@@ -5,7 +5,6 @@ from psgtray import SystemTray
 
 def image_gui():
     sg.theme('dark grey 13')
-    gif = b'mousegif.gif'
     layout = [[sg.Text('Это ClickCounter.')],
               [sg.Text('Посмотрите, как сильно вы мучаете кнопки своей верной серой подруги.')],
               [sg.Text()],
