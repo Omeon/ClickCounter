@@ -67,13 +67,14 @@ def image_gui():
     window.close()
     tray.close()
 
-
+    
 def refresh_count(window: sg.Window, keys: list):
     for key in keys:
         if Counter.counter[key][1]:
             window[key](Counter.counter[key][1])
 
-
+            
+# determining the path of the executable file for uploading images
 def resource_path(relative):
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative)
