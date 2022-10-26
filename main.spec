@@ -7,7 +7,7 @@ block_cipher = None
 a = Analysis(
     ['main.py'],
     pathex=[],
-    binaries=[('D:\\Projects\\Python\\ClickCounter\\img', 'img')],
+    binaries=[('D:\\Projects\\Python\\ClickCounter\\img', 'img')],  # here specify your path to the folder with images
     datas=[],
     hiddenimports=[],
     hookspath=[],
@@ -41,5 +41,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon = 'D:\\Projects\\Python\\ClickCounter\\img\\mouseclick.ico'
+    icon = 'D:\\Projects\\Python\\ClickCounter\\img\\mouseclick.ico'  # here specify your path to the icon
 )
